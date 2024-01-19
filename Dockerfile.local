@@ -17,6 +17,9 @@ RUN apt update && apt install -y \
   pkg-config\
   wget
 
+# Sofics specific tasks:
+RUN pip install docx2txt
+
 # https://python-poetry.org/docs/configuration/#virtualenvsin-project
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 

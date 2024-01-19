@@ -1,6 +1,7 @@
 """This file should be imported only and only if you want to run the UI locally."""
 import itertools
 import logging
+import os
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
@@ -18,7 +19,7 @@ from private_gpt.server.chat.chat_service import ChatService, CompletionGen
 from private_gpt.server.chunks.chunks_service import Chunk, ChunksService
 from private_gpt.server.ingest.ingest_service import IngestService
 from private_gpt.settings.settings import settings
-from private_gpt.ui.images import logo_svg
+from private_gpt.ui.images import chip_gpt_logo
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ THIS_DIRECTORY_RELATIVE = Path(__file__).parent.relative_to(PROJECT_ROOT_PATH)
 # Should be "private_gpt/ui/avatar-bot.ico"
 AVATAR_BOT = THIS_DIRECTORY_RELATIVE / "avatar-bot.ico"
 
-UI_TAB_TITLE = "My Private GPT"
+UI_TAB_TITLE = "ChipGPT"
 
 SOURCES_SEPARATOR = "\n\n Sources: \n"
 
@@ -219,17 +220,23 @@ class PrivateGptUi:
             "justify-content: center;"
             "align-items: center;"
             "}"
-            ".logo img { height: 25% }"
+            ".logo img { height: 100% }"
             ".contain { display: flex !important; flex-direction: column !important; }"
             "#component-0, #component-3, #component-10, #component-8  { height: 100% !important; }"
             "#chatbot { flex-grow: 1 !important; overflow: auto !important;}"
             "#col { height: calc(100vh - 112px - 16px) !important; }",
         ) as blocks:
             with gr.Row():
-                gr.HTML(f"<div class='logo'/><img src={logo_svg} alt=PrivateGPT></div")
+                gr.HTML(f"<div class='logo'/><img src={chip_gpt_logo} alt=ChipGPT></div")
 
             with gr.Row(equal_height=False):
                 with gr.Column(scale=3):
+                    try:
+                        version_str = os.environ['CHIPGPT_VERSION']
+                    except KeyError:
+                        version_str = "v?"
+                    gr.HTML(f"<p>{version_str}</p>")
+
                     mode = gr.Radio(
                         MODES,
                         label="Mode",
@@ -308,4 +315,4 @@ if __name__ == "__main__":
     ui = global_injector.get(PrivateGptUi)
     _blocks = ui.get_ui_blocks()
     _blocks.queue()
-    _blocks.launch(debug=False, show_api=False)
+    _blocks.launch(debug=False, show_api=False, favicon_path=str(AVATAR_BOT.resolve()))

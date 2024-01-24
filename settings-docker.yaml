@@ -5,8 +5,8 @@ server:
 # llm:
 #   mode: ${PGPT_MODE:mock}  # mock is to not run out of (video) memory
 
-# llm:
-#   max_new_tokens: 256
+llm:
+  max_new_tokens: 256  # the number of new tokens the LLM will generate and add to the context window (by default Llama.cpp uses 256)
 
 embedding:
   ingest_mode: parallel

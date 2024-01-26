@@ -146,7 +146,7 @@ class PrivateGptUi:
 
             case "Search in Docs":
                 response = self._chunks_service.retrieve_relevant(
-                    text=message, limit=4, prev_next_chunks=0
+                    text=message, limit=10, prev_next_chunks=0
                 )
 
                 sources = Source.curate_sources(response)

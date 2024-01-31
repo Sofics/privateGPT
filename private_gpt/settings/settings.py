@@ -178,6 +178,9 @@ class UISettings(BaseModel):
     default_query_system_prompt: str = Field(
         None, description="The default system prompt to use for the query mode."
     )
+    delete_files_button_enabled: bool = Field(
+        True, description="If the button to delete all files is enabled or not."
+    )
 
 
 class QdrantSettings(BaseModel):

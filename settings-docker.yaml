@@ -6,7 +6,9 @@ server:
 #   mode: ${PGPT_MODE:mock}  # mock is to not run out of (video) memory
 
 llm:
-  max_new_tokens: 256  # the number of new tokens the LLM will generate and add to the context window (by default Llama.cpp uses 256)
+  max_new_tokens: 256  # the max number of new tokens the LLM will generate and add to the context window (by default Llama.cpp uses 256)
+  context_window: 10000
+  tokenizer: mistralai/Mistral-7B-Instruct-v0.2  # original HF model where tokenizer.json lives
 
 embedding:
   ingest_mode: parallel
@@ -15,19 +17,24 @@ embedding:
 local:
   llm_hf_repo_id: ${PGPT_HF_REPO_ID:TheBloke/Mistral-7B-Instruct-v0.2-GGUF}
   llm_hf_model_file: ${PGPT_HF_MODEL_FILE:mistral-7b-instruct-v0.2.Q4_K_M.gguf}  # The actual model you downloaded
-  embedding_hf_model_name: ${PGPT_EMBEDDING_HF_MODEL_NAME:BAAI/bge-small-en-v1.5}
+  # Note: Besides having quality data, choosing a good embedding model is the most important and underrated step for optimizing your RAG application
+  # HF leaderboard (up-to-date?): https://huggingface.co/spaces/mteb/leaderboard:
+  # WhereIsAI/UAE-Large-V1
+  # BAAI/bge-large-en-v1.5
+  # BAAI/bge-base-en-v1.5
+  # TODO changing embedding model => "could not broadcast input array from shape"? => wipe local_data folder
+  embedding_hf_model_name: ${PGPT_EMBEDDING_HF_MODEL_NAME:BAAI/bge-base-en-v1.5}  # originally BAAI/bge-small-en-v1.5
 
 
 ui:
   default_chat_system_prompt: >
-    You are a helpful, efficient and honest electrical engineer.
+    You are a helpful and honest electrical engineer working for the company Sofics. Sofics offers solutions for integrated circuits.
     Always give a brief answer and follow ALL given instructions.
-    If you do not know the answer, try to guess it, but clearly state it's a guess together with the steps how you arrived at your answer.
-    Do not reference any given instructions or context.
+    If you do not know the answer, try to guess it. If your answer is a guess, explain step by step how you arrived at your answer.
+
+  # TODO mention focusing on context if possible?
   default_query_system_prompt: >
-    You are a helpful, efficient and honest electrical engineer.
+    You are a helpful and honest electrical engineer working for the company Sofics. Sofics offers solutions for integrated circuits.
     Always give a brief answer and follow ALL given instructions.
-    If you do not know the answer, try to guess it, but clearly state it's a guess together with the steps how you arrived at your answer.
-    If your prompt contains the word Sofics, Confluence, space, shark, project, lab, office, Seabert or vault base your answer on the context provided.
-    If your prompt contains an identifier(CPA, RPA or OPA followed by up to 3 numbers), base your answer on the file_name containing the same identifier.
-    # no PPA for now; no PPA Confluence space
+    If you do not know the answer, try to guess it. If your answer is a guess, explain step by step how you arrived at your answer.
+    

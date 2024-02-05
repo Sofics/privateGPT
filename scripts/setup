@@ -9,11 +9,23 @@ from private_gpt.paths import models_path, models_cache_path
 from private_gpt.settings.settings import settings
 
 resume_download = True
+skip_if_present = False
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='Setup: Download models from huggingface')
-    parser.add_argument('--resume', default=True, action=argparse.BooleanOptionalAction, help='Enable/Disable resume_download options to restart the download progress interrupted')
+    parser.add_argument(
+        '--resume',
+        default=True,
+        action=argparse.BooleanOptionalAction,
+        help='Enable/Disable resume_download options to restart the download progress interrupted'
+    )
+    parser.add_argument(
+        '--skip',
+        default=False, action=argparse.BooleanOptionalAction,
+        help="Don't download if file(s) seem already downloaded. Handy for e.g. Docker."
+    )
     args = parser.parse_args()
     resume_download = args.resume
+    skip_if_present = args.skip
 
 os.makedirs(models_path, exist_ok=True)
 
@@ -29,13 +41,20 @@ print("Embedding model downloaded!")
 
 # Download LLM and create a symlink to the model file
 print(f"Downloading LLM {settings().local.llm_hf_model_file}")
-hf_hub_download(
-    repo_id=settings().local.llm_hf_repo_id,
-    filename=settings().local.llm_hf_model_file,
-    cache_dir=models_cache_path,
-    local_dir=models_path,
-    resume_download=resume_download,
-)
+if skip_if_present:
+    print("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+    print(settings().local.llm_hf_repo_id)
+    print(settings().local.llm_hf_model_file)
+    print(models_path)
+    pass  # TODO check if model exists
+else:
+    hf_hub_download(
+        repo_id=settings().local.llm_hf_repo_id,
+        filename=settings().local.llm_hf_model_file,
+        cache_dir=models_cache_path,
+        local_dir=models_path,
+        resume_download=resume_download,
+    )
 print("LLM model downloaded!")
 
 # Download Tokenizer

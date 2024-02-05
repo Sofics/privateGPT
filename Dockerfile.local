@@ -17,7 +17,7 @@ RUN apt update && apt install -y \
   pkg-config\
   wget
 
-# Sofics specific tasks:
+# Optional install:
 RUN pip install docx2txt
 
 # https://python-poetry.org/docs/configuration/#virtualenvsin-project
@@ -30,6 +30,7 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry install --with local
 RUN poetry install --with ui
 
+# TODO what does line below do?
 FROM base as app
 
 ENV PYTHONUNBUFFERED=1
@@ -38,10 +39,17 @@ EXPOSE 8080
 
 # Prepare a non-root user
 RUN adduser --system worker
-WORKDIR /home/worker/app
+
+# TODO why was WORKDIR specified a second time?
+# WORKDIR /home/worker/app
+
+# Dir for matplotconfig
+RUN mkdir -p .config/matplotlib; chown worker .config/matplotlib; chmod 770 .config/matplotlib
+ENV MPLCONFIGDIR="/home/worker/app/.config/matplotlib"
 
 RUN mkdir local_data; chown worker local_data
-RUN mkdir models; chown worker models
+RUN mkdir -p models/cache; chown -R worker models; chmod -R 770 models
+# TODO why would you copy .venv if at the top of the dockerfile you already do RUN poetry install ?....
 COPY --chown=worker --from=dependencies /home/worker/app/.venv/ .venv
 COPY --chown=worker private_gpt/ private_gpt
 COPY --chown=worker fern/ fern
@@ -49,6 +57,13 @@ COPY --chown=worker *.yaml *.md ./
 COPY --chown=worker scripts/ scripts
 
 ENV PYTHONPATH="$PYTHONPATH:/private_gpt/"
+
+# download embedding model, LLM and tokenizer specified in settings.
+# TODO copying again to fix certain problem, must be solvable in a more logic way (e.g. only chown?)
+COPY --chown=worker pyproject.toml ./
+ENV TRANSFORMERS_CACHE="/home/worker/app/models/cache"
+RUN poetry run python scripts/setup --skip
+RUN chown -R worker private_gpt
 
 USER worker
 ENTRYPOINT python -m private_gpt

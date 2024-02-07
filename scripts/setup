@@ -47,6 +47,7 @@ if skip_if_present:
     print(settings().local.llm_hf_model_file)
     print(models_path)
     pass  # TODO check if model exists
+    # TODO fix symlinks etc. ? right now: "error: Provided model path does not exist. Please check the path or provide a model_url to download"
 else:
     hf_hub_download(
         repo_id=settings().local.llm_hf_repo_id,

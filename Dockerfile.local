@@ -27,8 +27,9 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry install --with local
 RUN poetry install --with ui
 # TODO check if this fixed docx problem:
+
 # Optional install:
-RUN poetry install docx2txt
+RUN pip3 install docx2txt
 
 # TODO what does line below do?
 FROM base as app
@@ -43,9 +44,12 @@ RUN adduser --system worker
 # TODO why was WORKDIR specified a second time?
 # WORKDIR /home/worker/app
 
-# Dir for matplotconfig
+# Special dirs
 RUN mkdir -p .config/matplotlib; chown worker .config/matplotlib; chmod 770 .config/matplotlib
 ENV MPLCONFIGDIR="/home/worker/app/.config/matplotlib"
+RUN mkdir -p .cache/transformers; chown worker .cache/transformers; chmod 770 .cache/transformers
+ENV TRANSFORMERS_CACHE="/home/worker/app/.cache/transformers"
+
 
 RUN mkdir local_data; chown worker local_data
 RUN mkdir -p models/cache; chown -R worker models; chmod -R 770 models
@@ -59,13 +63,14 @@ COPY --chown=worker scripts/ scripts
 
 ENV PYTHONPATH="$PYTHONPATH:/private_gpt/"
 
-# download embedding model, LLM and tokenizer specified in settings.
 # TODO copying again to fix certain problem, must be solvable in a more logic way (e.g. only chown?)
 COPY --chown=worker pyproject.toml ./
-# ENV TRANSFORMERS_CACHE="/home/worker/app/models/cache"
-# TODO adjust script with --skip option to not re-download each container build
-RUN poetry run python scripts/setup
+
+# TODO should be able to remove line below I believe
 RUN chown -R worker private_gpt
 
-USER worker
-ENTRYPOINT python -m private_gpt
+# USER worker
+
+# TODO fix it so that after setup we change to user worker? or so that the setup can be ran as user worker?
+# TODO "force_download" option false each time => files shouldn't be reran if volumes mounted nicely? ... (except for tokenizer)
+ENTRYPOINT poetry run python scripts/setup && python -m private_gpt

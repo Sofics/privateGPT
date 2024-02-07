@@ -206,6 +206,21 @@ class PrivateGptUi:
     def _upload_file(self, files: list[str]) -> None:
         logger.debug("Loading count=%s files", len(files))
         paths = [Path(file) for file in files]
+
+        # remove all existing Documents with name identical to a new file upload:
+        file_names = [path.name for path in paths]
+        doc_ids_to_delete = []
+        for ingested_document in self._ingest_service.list_ingested():
+            if ingested_document.doc_metadata["file_name"] in file_names:
+                doc_ids_to_delete.append(ingested_document.doc_id)
+        if len(doc_ids_to_delete) > 0:
+            logger.info(
+                "Uploading file(s) which were already ingested: %s document(s) will be replaced.",
+                len(doc_ids_to_delete),
+            )
+            for doc_id in doc_ids_to_delete:
+                self._ingest_service.delete(doc_id)
+
         self._ingest_service.bulk_ingest([(str(path.name), path) for path in paths])
 
     def _delete_all_files(self) -> None:
@@ -226,7 +241,6 @@ class PrivateGptUi:
             self._selected_filename = None
         elif select_data.selected is True:
             self._selected_filename = select_data.value
-
 
     def _build_ui_blocks(self) -> gr.Blocks:
         logger.debug("Creating the UI blocks")
@@ -249,12 +263,14 @@ class PrivateGptUi:
             "#col { height: calc(100vh - 112px - 16px) !important; }",
         ) as blocks:
             with gr.Row():
-                gr.HTML(f"<div class='logo'/><img src={chip_gpt_logo} alt=ChipGPT></div")
+                gr.HTML(
+                    f"<div class='logo'/><img src={chip_gpt_logo} alt=ChipGPT></div"
+                )
 
             with gr.Row(equal_height=False):
                 with gr.Column(scale=3):
                     try:
-                        version_str = os.environ['CHIPGPT_VERSION']
+                        version_str = os.environ["CHIPGPT_VERSION"]
                     except KeyError:
                         version_str = "v?"
                     gr.HTML(f"<p>{version_str}</p>")
@@ -293,8 +309,7 @@ class PrivateGptUi:
                         size="sm",
                         interactive=settings().ui.delete_file_button_enabled,
                     )
-                    delete_file_button.click(
-                        self._delete_selected_file)
+                    delete_file_button.click(self._delete_selected_file)
                     delete_files_button = gr.components.Button(
                         "Delete all files",
                         size="sm",

@@ -39,13 +39,13 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Prepare a non-root user
-RUN adduser worker
+RUN adduser --system worker
 
 # Special dirs
 RUN mkdir -p .config/matplotlib; chown worker .config/matplotlib; chmod 770 .config/matplotlib
 ENV MPLCONFIGDIR="/home/worker/app/.config/matplotlib"
-RUN mkdir -p .cache/transformers; chown worker .cache/transformers; chmod 770 .cache/transformers
-ENV TRANSFORMERS_CACHE="/home/worker/app/.cache/transformers"
+RUN mkdir -p .cache/huggingface; chown worker .cache/huggingface; chmod 770 .cache/huggingface
+ENV HF_HOME="/home/worker/app/.cache/huggingface"
 
 
 RUN mkdir local_data; chown worker local_data
@@ -62,12 +62,11 @@ ENV PYTHONPATH="$PYTHONPATH:/private_gpt/"
 
 # TODO copying again to fix certain problem, must be solvable in a more logic way (e.g. only chown?)
 COPY --chown=worker pyproject.toml ./
-
 # TODO should be able to remove line below I believe
 RUN chown -R worker private_gpt
-
-# USER worker
-
 # TODO fix it so that after setup we change to user worker? or so that the setup can be ran as user worker?
 # TODO "force_download" option false each time => files shouldn't be reran if volumes mounted nicely? ... (except for tokenizer)
-ENTRYPOINT poetry run python scripts/setup && su worker -c "python -m private_gpt"
+USER worker
+ENTRYPOINT poetry run python scripts/setup && python -m private_gpt
+
+# TODO you're a more technical person? Below is the

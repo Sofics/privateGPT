@@ -27,10 +27,9 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry install --with local
 RUN poetry install --with ui
 
-# Optional install:  # TODO test if it works
+# Optional install(s):
 RUN pip3 install docx2txt
 
-# TODO what does line below do?
 FROM base as app
 WORKDIR /home/worker/app
 
@@ -42,32 +41,23 @@ EXPOSE 8080
 RUN adduser worker
 
 # Special dirs
-RUN mkdir -p .config/matplotlib; chown worker .config/matplotlib; chmod 770 .config/matplotlib
+RUN mkdir -p .config/matplotlib; chown worker .config/matplotlib
 ENV MPLCONFIGDIR="/home/worker/app/.config/matplotlib"
-RUN mkdir -p .cache/transformers; chown worker .cache/transformers; chmod 770 .cache/transformers
-ENV TRANSFORMERS_CACHE="/home/worker/app/.cache/transformers"
+RUN mkdir -p .cache/huggingface; chown worker .cache/huggingface
+ENV HF_HOME="/home/worker/app/.cache/huggingface"
 
-
-RUN mkdir local_data; chown worker local_data
-RUN mkdir -p models/cache; chown -R worker models; chmod -R 770 models
-# TODO why would you copy .venv if at the top of the dockerfile you already do RUN poetry install ?....
+RUN mkdir local_data
+RUN mkdir -p models/cache
 COPY --chown=worker --from=dependencies /home/worker/app/.venv/ .venv
 COPY --chown=worker private_gpt/ private_gpt
-# TODO don't copy fern? is documentation only ... (check if fastapi doc page is still available)
-COPY --chown=worker fern/ fern
 COPY --chown=worker *.yaml *.md ./
 COPY --chown=worker scripts/ scripts
 
+# NOTE: no idea why fern was copied; fastapi /docs page is still available without
+# COPY --chown=worker fern/ fern
+
 ENV PYTHONPATH="$PYTHONPATH:/private_gpt/"
 
-# TODO copying again to fix certain problem, must be solvable in a more logic way (e.g. only chown?)
-COPY --chown=worker pyproject.toml ./
-
-# TODO should be able to remove line below I believe
-RUN chown -R worker private_gpt
-
-# USER worker
-
-# TODO fix it so that after setup we change to user worker? or so that the setup can be ran as user worker?
-# TODO "force_download" option false each time => files shouldn't be reran if volumes mounted nicely? ... (except for tokenizer)
-ENTRYPOINT poetry run python scripts/setup && su worker -c "python -m private_gpt"
+# NOTE: Running setup in entrypoint, so that big downloads are skipped if already setup in volume
+COPY pyproject.toml ./
+ENTRYPOINT poetry run python scripts/setup --docker && chown -R worker models local_data && su worker -c "python -m private_gpt"

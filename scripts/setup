@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import argparse
-import subprocess
+import urllib
 
 from huggingface_hub import hf_hub_download, snapshot_download
 from transformers import AutoTokenizer
@@ -33,9 +33,9 @@ if __name__ == '__main__':
 
 def internet_connection():
     try:
-        subprocess.check_output(["ping", "-c", "1", "8.8.8.8"])
+        urllib.request.urlopen("https://www.google.com/")
         return True
-    except subprocess.CalledProcessError:
+    except urllib.error.URLError:
         return False
 
 

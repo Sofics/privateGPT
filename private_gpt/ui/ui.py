@@ -2,6 +2,7 @@
 import itertools
 import logging
 import os
+import time
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
@@ -90,6 +91,7 @@ class PrivateGptUi:
                 elif isinstance(delta, ChatResponse):
                     full_response += delta.delta or ""
                 yield full_response
+                time.sleep(0.02)
 
             if completion_gen.sources:
                 full_response += SOURCES_SEPARATOR

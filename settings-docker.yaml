@@ -7,7 +7,7 @@ server:
 
 llm:
   max_new_tokens: 256  # the max number of new tokens the LLM will generate and add to the context window (by default Llama.cpp uses 256)
-  context_window: 10000
+  context_window: 32768  # NOTE: 32768 is too big for CPU without context filter, in that case use 3900 - 12000
   tokenizer: mistralai/Mistral-7B-Instruct-v0.2  # original HF model where tokenizer.json lives
 
 embedding:

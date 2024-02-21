@@ -30,6 +30,7 @@ local:
 
 
 ui:
+<<<<<<< HEAD
   default_chat_system_prompt: >
     You are a helpful and honest electrical engineer specialized in solutions for integrated circuits.
     Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
@@ -38,3 +39,7 @@ ui:
     You are a helpful and honest electrical engineer specialized in solutions for integrated circuits.
     Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
     
+=======
+  enabled: true
+  path: /
+>>>>>>> v0.3.0

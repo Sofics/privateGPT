@@ -1,6 +1,10 @@
 """This file should be imported only and only if you want to run the UI locally."""
 import itertools
 import logging
+<<<<<<< HEAD
+import os
+=======
+>>>>>>> v0.3.0
 import time
 from collections.abc import Iterable
 from pathlib import Path
@@ -227,10 +231,14 @@ class PrivateGptUi:
         file_names = [path.name for path in paths]
         doc_ids_to_delete = []
         for ingested_document in self._ingest_service.list_ingested():
+<<<<<<< HEAD
+            if ingested_document.doc_metadata["file_name"] in file_names:
+=======
             if (
                 ingested_document.doc_metadata
                 and ingested_document.doc_metadata["file_name"] in file_names
             ):
+>>>>>>> v0.3.0
                 doc_ids_to_delete.append(ingested_document.doc_id)
         if len(doc_ids_to_delete) > 0:
             logger.info(
@@ -242,11 +250,30 @@ class PrivateGptUi:
 
         self._ingest_service.bulk_ingest([(str(path.name), path) for path in paths])
 
+<<<<<<< HEAD
+    def _delete_all_files(self) -> None:
+=======
     def _delete_all_files(self) -> Any:
+>>>>>>> v0.3.0
         ingested_files = self._ingest_service.list_ingested()
         logger.debug("Deleting count=%s files", len(ingested_files))
         for ingested_document in ingested_files:
             self._ingest_service.delete(ingested_document.doc_id)
+<<<<<<< HEAD
+
+    def _delete_selected_file(self) -> None:
+        logger.debug("Deleting selected %s", self._selected_filename)
+        # Note: keep looping for pdf's (each page became a Document)
+        for ingested_document in self._ingest_service.list_ingested():
+            if ingested_document.doc_metadata["file_name"] == self._selected_filename:
+                self._ingest_service.delete(ingested_document.doc_id)
+
+    def _selected_a_file(self, select_data: gr.SelectData) -> None:
+        if select_data.selected is False:
+            self._selected_filename = None
+        elif select_data.selected is True:
+            self._selected_filename = select_data.value
+=======
         return [
             gr.List(self._list_ingested_files()),
             gr.components.Button(interactive=False),
@@ -286,6 +313,7 @@ class PrivateGptUi:
             gr.components.Button(interactive=True),
             gr.components.Textbox(self._selected_filename),
         ]
+>>>>>>> v0.3.0
 
     def _build_ui_blocks(self) -> gr.Blocks:
         logger.debug("Creating the UI blocks")
@@ -349,6 +377,21 @@ class PrivateGptUi:
                         outputs=ingested_dataset,
                     )
                     ingested_dataset.render()
+<<<<<<< HEAD
+                    ingested_dataset.select(self._selected_a_file)
+                    delete_file_button = gr.components.Button(
+                        "Delete selected file",
+                        size="sm",
+                        interactive=settings().ui.delete_file_button_enabled,
+                    )
+                    delete_file_button.click(self._delete_selected_file)
+                    delete_files_button = gr.components.Button(
+                        "Delete all files",
+                        size="sm",
+                        interactive=settings().ui.delete_all_files_button_enabled,
+                    )
+                    delete_files_button.click(self._delete_all_files)
+=======
                     deselect_file_button = gr.components.Button(
                         "De-select selected file", size="sm", interactive=False
                     )
@@ -400,6 +443,7 @@ class PrivateGptUi:
                             selected_text,
                         ],
                     )
+>>>>>>> v0.3.0
                     system_prompt_input = gr.Textbox(
                         placeholder=self._system_prompt,
                         label="System Prompt",

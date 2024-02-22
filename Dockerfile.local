@@ -60,4 +60,4 @@ ENV PYTHONPATH="$PYTHONPATH:/private_gpt/"
 
 # NOTE: Running setup in entrypoint, so that big downloads are skipped if already setup in volume
 COPY pyproject.toml ./
-ENTRYPOINT poetry run python scripts/setup --docker && chown -R worker models local_data && su worker -c "python -m private_gpt"
+ENTRYPOINT poetry run python scripts/setup --docker && chown -R worker models local_data && su worker -c ".venv/bin/python -m private_gpt"

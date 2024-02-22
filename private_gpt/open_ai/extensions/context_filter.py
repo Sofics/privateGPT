@@ -1,8 +1,6 @@
 import re
 
 from pydantic import BaseModel, Field
-from private_gpt.server.ingest.ingest_service import IngestService
-
 
 class ContextFilter(BaseModel):
     docs_ids: list[str] | None = Field(
@@ -10,7 +8,7 @@ class ContextFilter(BaseModel):
     )
 
 
-def get_sofics_context_filter(prompt: str) -> ContextFilter:
+def get_sofics_context_filter(prompt: str, ingest_service) -> ContextFilter:
     """Get a custom, efficient Sofics context filter based on keywords from given prompt."""
     # NOTE: checking everything lowercase except for capturing names
     lowered_prompt = prompt.lower()
@@ -26,7 +24,7 @@ def get_sofics_context_filter(prompt: str) -> ContextFilter:
     lowered_possible_names = [f" {name.lower()}" for name in possible_names]
     if "sofics" in lowered_possible_names:
         lowered_possible_names.remove("sofics")  # resulted in many random spaces as relevant context
-    print(f"Possible important names: {lowered_possible_names}")
+    # print(f"Possible important names: {lowered_possible_names}")
 
     confluence_keyword_dict = {
         # NOTE: put intentional spaces in front of keywords that could be part of another word
@@ -62,9 +60,7 @@ def get_sofics_context_filter(prompt: str) -> ContextFilter:
     relevant_doc_ids = set()
     relevant_file_names = set()
     file_names_checked = set()
-    # start_time = time.time()
-    docs = IngestService.list_ingested()
-    # print(time.time() - start_time)
+    docs = ingest_service.list_ingested()
     for doc in docs:
         file_name = doc.doc_metadata["file_name"]
 

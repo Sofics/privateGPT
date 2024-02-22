@@ -141,7 +141,10 @@ class PrivateGptUi:
                 query_stream = self._chat_service.stream_chat(
                     messages=[new_message],
                     use_context=True,
-                    context_filter=get_sofics_context_filter(prompt = new_message.content),
+                    context_filter=get_sofics_context_filter(
+                        prompt=new_message.content,
+                        ingest_service=self._ingest_service
+                    ),
                 )
                 yield from yield_deltas(query_stream)
 
@@ -192,7 +195,7 @@ class PrivateGptUi:
         p = ""
         match mode:
             # For query chat mode, obtain default system prompt from settings
-            case "Sofics Query"
+            case "Sofics Query":
                 p = settings().ui.default_query_system_prompt
             case "Query Files":
                 p = settings().ui.default_query_system_prompt

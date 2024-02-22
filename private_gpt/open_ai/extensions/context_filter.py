@@ -31,7 +31,7 @@ def get_sofics_context_filter(prompt: str, ingest_service) -> ContextFilter:
         "hiring": ["new employee", "new hire", "new colleague", "interview", "cv"],
         "ip follow-up": [" ip", "invention"],
         "lunch & learn": ["l&l", "lunch"],
-        "office wiki": ["office", "building", "at work", "sofics"],  # TODO DN
+        "office wiki": ["office", "building", "at work", "sofics"],  # TODO extra's from DN later on?
         "samsung": ["samsung"],
         "sharknet help": ["sharknet"],
         "it admin": ["admin", "localadmin"],
@@ -41,11 +41,11 @@ def get_sofics_context_filter(prompt: str, ingest_service) -> ContextFilter:
         "wiki admin": ["admin"],
         "sofics r&d": ["r&d", "research", "development", "invention"],
         "pq pmg admin": [" esd", "powerqubic", "pq", "testchip", "ehc", "rcs", "smos"],
-        "takecharge portfolio management": ["takecharge"],  # TODO BS / JVDB
+        "takecharge portfolio management": ["takecharge", " esd", "testchip", "ehc", "rcs", "smos"],
         "phystar pmg": ["phystar"],
         # TODO Fix Nordic exports <-> OM (special char / ...?)
         # NOTE: big spaces are split up into main pages:
-        "shark wiki esd design": [" esd", "testchip", "ehc", "rcs", "smos"],  # TODO  + keywords takecharge
+        "shark wiki esd design": [" esd", "testchip", "ehc", "rcs", "smos"],
         "shark wiki circuit design": ["analog", " io", "levelshift", "amplifier", "noise", "clock", "i/o", "ovt", "ldo", "circuit design", "lin", "can"],
         "shark wiki lab": ["lab", "equipment"],
         "shark wiki software & simulations": ["simulation", "program", "software", " tool", "teggy", "pyshark"],

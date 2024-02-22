@@ -16,7 +16,7 @@ from pydantic import BaseModel
 
 from private_gpt.constants import PROJECT_ROOT_PATH
 from private_gpt.di import global_injector
-from private_gpt.open_ai.extensions.context_filter import ContextFilter
+from private_gpt.open_ai.extensions.context_filter import ContextFilter, get_sofics_context_filter
 from private_gpt.server.chat.chat_service import ChatService, CompletionGen
 from private_gpt.server.chunks.chunks_service import Chunk, ChunksService
 from private_gpt.server.ingest.ingest_service import IngestService
@@ -33,7 +33,8 @@ UI_TAB_TITLE = "ChipGPT"
 
 SOURCES_SEPARATOR = "\n\n Sources: \n"
 
-MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)"]
+# MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)"]
+MODES = ["Sofics Query", "Query Files", "Search Files"]
 
 
 class Source(BaseModel):
@@ -136,9 +137,16 @@ class PrivateGptUi:
                 ),
             )
         match mode:
-            case "Query Files":
+            case "Sofics Query":
+                query_stream = self._chat_service.stream_chat(
+                    messages=[new_message],
+                    use_context=True,
+                    context_filter=get_sofics_context_filter(prompt = new_message.content),
+                )
+                yield from yield_deltas(query_stream)
 
-                # Use only the selected file for the query
+            case "Query Files":
+                # Use only the selected file for the query, if selected
                 context_filter = None
                 if self._selected_filename is not None:
                     docs_ids = []
@@ -184,6 +192,8 @@ class PrivateGptUi:
         p = ""
         match mode:
             # For query chat mode, obtain default system prompt from settings
+            case "Sofics Query"
+                p = settings().ui.default_query_system_prompt
             case "Query Files":
                 p = settings().ui.default_query_system_prompt
             # For chat mode, obtain default system prompt from settings
@@ -324,13 +334,14 @@ class PrivateGptUi:
                     mode = gr.Radio(
                         MODES,
                         label="Mode",
-                        value="Query Files",
+                        value="Sofics Query",
                     )
                     upload_button = gr.components.UploadButton(
                         "Upload File(s)",
                         type="filepath",
                         file_count="multiple",
                         size="sm",
+                        visible= settings().ui.upload_file_button_enabled,
                     )
                     ingested_dataset = gr.List(
                         self._list_ingested_files,
@@ -354,7 +365,7 @@ class PrivateGptUi:
                         "De-select selected file", size="sm", interactive=False
                     )
                     selected_text = gr.components.Textbox(
-                        "All files", label="Selected for Query or Deletion", max_lines=1
+                        "All files", label="Selected for File Query or Deletion", max_lines=1
                     )
                     delete_file_button = gr.components.Button(
                         "🗑️ Delete selected file",

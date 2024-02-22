@@ -7,7 +7,7 @@ server:
 
 llm:
   max_new_tokens: 256  # the max number of new tokens the LLM will generate and add to the context window (by default Llama.cpp uses 256)
-  context_window: 32768  # NOTE: 32768 is too big for CPU without context filter, in that case use 3900 - 12000
+  context_window: 100_000  # NOTE: 32768 is too big for CPU without context filter, in that case use 3900 - 12000
   tokenizer: mistralai/Mistral-7B-Instruct-v0.2  # original HF model where tokenizer.json lives
 
 embedding:
@@ -31,10 +31,10 @@ local:
 
 ui:
   default_chat_system_prompt: >
-    You are a helpful and honest electrical engineer specialized in solutions for integrated circuits.
+    You are a helpful and honest electrical engineer specialized in integrated circuits, working at Sofics.
     Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
   # TODO mention focusing on context if possible?
   default_query_system_prompt: >
-    You are a helpful and honest electrical engineer specialized in solutions for integrated circuits.
+    You are a helpful and honest electrical engineer specialized in integrated circuits, working at Sofics.
     Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
     

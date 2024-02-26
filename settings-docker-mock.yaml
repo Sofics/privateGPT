@@ -1,0 +1,26 @@
+server:
+  env_name: ${APP_ENV:prod}
+  port: ${PORT:8080}
+
+llm:
+  max_new_tokens: 256  # the max number of new tokens the LLM will generate and add to the context window (by default Llama.cpp uses 256)
+  context_window: 8192  # NOTE: 32768 is too big for CPU without context filter, in that case use 3900 - 12000
+  tokenizer: meta-llama/Llama-2-13b-chat-hf  # original HF model where tokenizer.json lives
+  mode: mock  # mock is to not run out of (video) memory <-> use when embedding!
+
+local:
+  llm_hf_repo_id: ${PGPT_HF_REPO_ID:TheBloke/Llama-2-13B-chat-GGUF}
+  llm_hf_model_file: ${PGPT_HF_MODEL_FILE:llama-2-13b-chat.Q5_K_M.gguf}
+  # originally BAAI/bge-small-en-v1.5 , alternatively BAAI/bge-base-en-v1.5
+  embedding_hf_model_name: ${PGPT_EMBEDDING_HF_MODEL_NAME:BAAI/bge-large-en-v1.5}
+  prompt_style: llama2
+
+
+ui:
+  default_chat_system_prompt: >
+    You are a helpful and honest electrical engineer specialized in integrated circuits, working at Sofics.
+    Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
+  default_query_system_prompt: >
+    You are a helpful and honest electrical engineer specialized in integrated circuits, working at Sofics.
+    Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
+    

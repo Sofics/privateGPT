@@ -46,7 +46,7 @@ llm:
 embedding:
   # Should be matching the value above in most cases
   mode: local
-  ingest_mode: simple
+  ingest_mode: batch
 
 vectorstore:
   database: qdrant

@@ -8,9 +8,6 @@ llm:
   tokenizer: meta-llama/Llama-2-13b-chat-hf  # original HF model where tokenizer.json lives
 #  mode: ${PGPT_MODE:mock}  # mock is to not run out of (video) memory <-> use when embedding!
 
-embedding:
-  mode: ${PGPT_MODE:sagemaker}
-
 local:
   llm_hf_repo_id: ${PGPT_HF_REPO_ID:TheBloke/Llama-2-13B-chat-GGUF}
   llm_hf_model_file: ${PGPT_HF_MODEL_FILE:llama-2-13b-chat.Q5_K_M.gguf}

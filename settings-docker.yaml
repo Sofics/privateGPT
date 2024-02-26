@@ -13,7 +13,7 @@ embedding:
 
 local:
   llm_hf_repo_id: ${PGPT_HF_REPO_ID:TheBloke/Llama-2-13B-chat-GGUF}
-  llm_hf_model_file: ${PGPT_HF_MODEL_FILE:llama-2-13b-chat.Q6_K.gguf}
+  llm_hf_model_file: ${PGPT_HF_MODEL_FILE:llama-2-13b-chat.Q5_K_M.gguf}
   # originally BAAI/bge-small-en-v1.5 , alternatively BAAI/bge-base-en-v1.5
   embedding_hf_model_name: ${PGPT_EMBEDDING_HF_MODEL_NAME:BAAI/bge-large-en-v1.5}
   prompt_style: llama2

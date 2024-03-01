@@ -34,7 +34,7 @@ UI_TAB_TITLE = "ChipGPT"
 SOURCES_SEPARATOR = "\n\n Sources: \n"
 
 # MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)"]
-MODES = ["Sofics Query", "Query Files", "Search Files"]
+MODES = ["Query Files", "Search Files"]
 
 
 class Source(BaseModel):
@@ -337,14 +337,14 @@ class PrivateGptUi:
                     mode = gr.Radio(
                         MODES,
                         label="Mode",
-                        value="Sofics Query",
+                        value="Query files",
                     )
                     upload_button = gr.components.UploadButton(
                         "Upload File(s)",
                         type="filepath",
                         file_count="multiple",
                         size="sm",
-                        visible= settings().ui.upload_file_button_enabled,
+                        visible=settings().ui.upload_file_button_enabled,
                     )
                     ingested_dataset = gr.List(
                         self._list_ingested_files,

@@ -48,8 +48,13 @@ llamacpp:
 
 embedding:
   # Should be matching the value above in most cases
-  mode: huggingface
+<<<<<<< HEAD
+  mode: local
   ingest_mode: batch
+=======
+  mode: huggingface
+  ingest_mode: simple
+>>>>>>> v0.4.0
 
 huggingface:
   embedding_hf_model_name: BAAI/bge-small-en-v1.5

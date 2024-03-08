@@ -44,19 +44,19 @@ if not ran_from_dockerfile or (ran_from_dockerfile and internet_connection()):
 
     # Download Embedding model, NOTE: doesn't re-download if ok
     embedding_path = models_path / "embedding"
-print(f"Downloading embedding {settings().huggingface.embedding_hf_model_name}")
+    print(f"Downloading embedding {settings().huggingface.embedding_hf_model_name}")
     snapshot_download(
-    repo_id=settings().huggingface.embedding_hf_model_name,
+        repo_id=settings().huggingface.embedding_hf_model_name,
         cache_dir=models_cache_path,
         local_dir=embedding_path,
     )
     print("Embedding model downloaded!")
 
     # Download LLM and create a symlink to the model file, NOTE: doesn't re-download if ok
-print(f"Downloading LLM {settings().llamacpp.llm_hf_model_file}")
+    print(f"Downloading LLM {settings().llamacpp.llm_hf_model_file}")
     hf_hub_download(
-    repo_id=settings().llamacpp.llm_hf_repo_id,
-    filename=settings().llamacpp.llm_hf_model_file,
+        repo_id=settings().llamacpp.llm_hf_repo_id,
+        filename=settings().llamacpp.llm_hf_model_file,
         cache_dir=models_cache_path,
         local_dir=models_path,
         resume_download=resume_download,

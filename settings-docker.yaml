@@ -3,17 +3,18 @@ server:
   port: ${PORT:8080}
 
 llm:
+  mode: llamacpp
   max_new_tokens: 256  # the max number of new tokens the LLM will generate and add to the context window (by default Llama.cpp uses 256)
   context_window: 4096  # 4096 is the same as chatgpt. file(s) /w more tokens? => windowsing / chunking
-  tokenizer: NousResearch/Nous-Hermes-2-SOLAR-10.7B  # original HF model where tokenizer.json lives
+  tokenizer: mistralai/Mistral-7B-Instruct-v0.2  # only needed for setup script (if llama-cpp)
 
 llamacpp:
-  llm_hf_repo_id: ${PGPT_HF_REPO_ID:TheBloke/Nous-Hermes-2-SOLAR-10.7B-GGUF}
-  llm_hf_model_file: ${PGPT_HF_MODEL_FILE:nous-hermes-2-solar-10.7b.Q4_K_M.gguf}
+  prompt_style: chatml
+  llm_hf_repo_id: ${PGPT_HF_REPO_ID:TheBloke/Mistral-7B-Instruct-v0.1-GGUF}
+  llm_hf_model_file: ${PGPT_HF_MODEL_FILE:mistral-7b-instruct-v0.1.Q4_K_M.gguf}
 
 huggingface:
-  prompt_style: chatml
-
+  embedding_hf_model_name: ${PGPT_EMBEDDING_HF_MODEL_NAME:BAAI/bge-small-en-v1.5}
 
 ui:
   default_chat_system_prompt: >

@@ -337,7 +337,7 @@ class PrivateGptUi:
                     mode = gr.Radio(
                         MODES,
                         label="Mode",
-                        value="Query files",
+                        value="Query Files",
                     )
                     upload_button = gr.components.UploadButton(
                         "Upload File(s)",

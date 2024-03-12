@@ -2,6 +2,7 @@
 
 import logging
 import os
+from pathlib import Path
 
 # Set to 'DEBUG' to have extensive logging turned on, even for libraries
 ROOT_LOG_LEVEL = "INFO"
@@ -24,4 +25,5 @@ os.environ["GRADIO_ANALYTICS_ENABLED"] = "False"
 # os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
 # adding tiktoken cache path within repo to be able to run in offline environment.
-os.environ["TIKTOKEN_CACHE_DIR"] = "tiktoken_cache"
+tiktoken_path = Path(__file__).parent.parent / "tiktoken_cache"
+os.environ["TIKTOKEN_CACHE_DIR"] = str(tiktoken_path)

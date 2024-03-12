@@ -53,6 +53,7 @@ COPY --chown=worker --from=dependencies /home/worker/app/.venv/ .venv
 COPY --chown=worker private_gpt/ private_gpt
 COPY --chown=worker *.yaml *.md ./
 COPY --chown=worker scripts/ scripts
+COPY --chown=worker tiktoken_cache/ tiktoken_cache
 
 # NOTE: no idea why fern was copied; fastapi /docs page is still available without
 # COPY --chown=worker fern/ fern

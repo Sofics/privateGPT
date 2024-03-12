@@ -34,8 +34,8 @@ UI_TAB_TITLE = "ChipGPT"
 
 SOURCES_SEPARATOR = "\n\n Sources: \n"
 
-# MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)"]
-MODES = ["Query Files", "Search Files"]
+MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)"]
+# MODES = ["Query Files", "Search Files"]
 
 
 class Source(BaseModel):

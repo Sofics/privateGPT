@@ -6,6 +6,7 @@ llm:
   mode: ollama
   max_new_tokens: 256  # the max number of new tokens the LLM will generate and add to the context window (by default Llama.cpp uses 256)
   context_window: 4096  # 4096 is the same as chatgpt. file(s) /w more tokens? => windowsing / chunking
+  temperature: 0.1     #The temperature of the model. Increasing the temperature will make the model answer more creatively. A value of 0.1 would be more factual. (Default: 0.1)
 #  tokenizer: NousResearch/Nous-Hermes-2-SOLAR-10.7B
 
 embedding:
@@ -14,11 +15,21 @@ embedding:
 #huggingface:
 #  embedding_hf_model_name: ${PGPT_EMBEDDING_HF_MODEL_NAME:BAAI/bge-small-en-v1.5}
 
-
 ollama:
   llm_model: nous-hermes2:10.7b
   embedding_model: nomic-embed-text
   api_base: http://ollama:11434
+  tfs_z: 1.0            # Tail free sampling is used to reduce the impact of less probable tokens from the output. A higher value (e.g., 2.0) will reduce the impact more, while a value of 1.0 disables this setting.
+  top_k: 40             # Reduces the probability of generating nonsense. A higher value (e.g. 100) will give more diverse answers, while a lower value (e.g. 10) will be more conservative. (Default: 40)
+  top_p: 0.9            # Works together with top-k. A higher value (e.g., 0.95) will lead to more diverse text, while a lower value (e.g., 0.5) will generate more focused and conservative text. (Default: 0.9)
+  repeat_last_n: 64     # Sets how far back for the model to look back to prevent repetition. (Default: 64, 0 = disabled, -1 = num_ctx)
+  repeat_penalty: 1.2   # Sets how strongly to penalize repetitions. A higher value (e.g., 1.5) will penalize repetitions more strongly, while a lower value (e.g., 0.9) will be more lenient. (Default: 1.1)
+
+vectorstore:
+  database: qdrant
+
+qdrant:
+  path: local_data/private_gpt/qdrant
 
 ui:
   default_chat_system_prompt: >

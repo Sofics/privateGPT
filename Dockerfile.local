@@ -26,7 +26,7 @@ COPY pyproject.toml poetry.lock ./
 
 # TODO check if it's possible to embed with RAM and huggingface embedder?
 # TODO remove embeddings-huggingface if not gonna use (gives error for now)
-RUN poetry install --extras "ui llms-ollama vector-stores-qdrant embeddings-huggingface"
+RUN poetry install --extras "ui llms-ollama vector-stores-qdrant embeddings-ollama"
 
 # Optional install(s):
 # RUN pip3 install docx2txt
@@ -60,4 +60,4 @@ COPY --chown=worker scripts/ scripts
 ENV PYTHONPATH="$PYTHONPATH:/private_gpt/"
 
 USER worker
-ENTRYPOINT python -m private_gpt
+ENTRYPOINT .venv/bin/python -m private_gpt

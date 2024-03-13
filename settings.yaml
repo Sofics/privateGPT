@@ -33,7 +33,7 @@ ui:
     the answer, just state the answer is not in the context provided.
   upload_file_button_enabled:  true
   delete_file_button_enabled: true
-  delete_all_files_button_enabled: true
+  delete_all_files_button_enabled: false
 
 llm:
   mode: ollama

@@ -317,7 +317,7 @@ class PrivateGptUi:
             theme=gr.themes.Soft(primary_hue=slate),
             css=".logo { "
             "display:flex;"
-            "background-color: #C7BAFF;"
+            "background-color: #ffffff;"
             "height: 80px;"
             "border-radius: 8px;"
             "align-content: center;"

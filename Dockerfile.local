@@ -26,7 +26,7 @@ COPY pyproject.toml poetry.lock ./
 
 # TODO check if it's possible to embed with RAM and huggingface embedder?
 # TODO remove embeddings-huggingface if not gonna use (gives error for now)
-RUN poetry install --extras "ui llms-ollama vector-stores-qdrant embeddings-ollama"
+RUN poetry install --extras "ui llms-ollama vector-stores-qdrant embeddings-ollama cryptography"
 
 # Optional install(s):
 # RUN pip3 install docx2txt

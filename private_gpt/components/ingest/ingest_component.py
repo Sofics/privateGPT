@@ -136,11 +136,15 @@ class SimpleIngestComponent(BaseIngestComponentWithIndex):
     def _save_docs(self, documents: list[Document]) -> list[Document]:
         logger.debug("Transforming count=%s documents into nodes", len(documents))
         with self._index_thread_lock:
+            skipped_docs = 0
             for document in documents:
-                logger.info("%s", type(document))
-                logger.info("%s", document.__dict__)
-                self._index.insert(document, show_progress=True)
-                logger.info("----------OK--------------------")
+                try:
+                    self._index.insert(document, show_progress=True)
+                except ValueError as e:
+                    logger.error("%s", str(e))
+                    logger.error("SKIPPED DOCUMENT:\n%s", document.__dict__)
+                    skipped_docs += 1
+            logger.warning("########## SKIPPED %s DOCS !... ##########", skipped_docs)
             logger.debug("Persisting the index and nodes")
             # persist the index and nodes
             self._save_index()

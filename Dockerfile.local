@@ -29,7 +29,7 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry install --extras "ui llms-ollama vector-stores-qdrant embeddings-ollama cryptography"
 
 # Optional install(s):
-# RUN pip3 install docx2txt
+RUN pip3 install docx2txt
 
 FROM base as app
 WORKDIR /home/worker/app

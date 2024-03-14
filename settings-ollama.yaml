@@ -12,7 +12,7 @@ embedding:
 
 ollama:
   llm_model: nous-hermes2:10.7b
-  embedding_model: nomic-embed-text
+  embedding_model: nomic-embed-text:latest
   api_base: http://ollama:11434
   tfs_z: 1.0            # Tail free sampling is used to reduce the impact of less probable tokens from the output. A higher value (e.g., 2.0) will reduce the impact more, while a value of 1.0 disables this setting.
   top_k: 40             # Reduces the probability of generating nonsense. A higher value (e.g. 100) will give more diverse answers, while a lower value (e.g. 10) will be more conservative. (Default: 40)

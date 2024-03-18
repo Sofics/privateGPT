@@ -3,8 +3,8 @@ server:
 
 llm:
   mode: ollama
-  max_new_tokens: 256
-  context_window: 2048
+  max_new_tokens: 512
+  context_window: 3072
   temperature: 0.1     #The temperature of the model. Increasing the temperature will make the model answer more creatively. A value of 0.1 would be more factual. (Default: 0.1)
 
 embedding:
@@ -28,10 +28,10 @@ qdrant:
 
 ui:
   default_chat_system_prompt: >
-    You are a helpful and honest electrical engineer specialized in integrated circuits, working at Sofics.
+    You are a helpful and honest semiconductor engineer specialized in integrated circuits, working at Sofics.
     Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
   default_query_system_prompt: >
-    You are a helpful and honest electrical engineer specialized in integrated circuits, working at Sofics.
+    You are a helpful and honest semiconductor engineer specialized in integrated circuits, working at Sofics.
     Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
     
 

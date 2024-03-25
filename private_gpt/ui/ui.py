@@ -34,8 +34,7 @@ UI_TAB_TITLE = "ChipGPT"
 
 SOURCES_SEPARATOR = "\n\n Sources: \n"
 
-MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)"]
-# MODES = ["Query Files", "Search Files"]
+MODES = ["Query Files", "Search Files", "Ask", "Improve"]
 
 
 class Source(BaseModel):
@@ -176,7 +175,7 @@ class PrivateGptUi:
                     context_filter=context_filter,
                 )
                 yield from yield_deltas(query_stream)
-            case "LLM Chat (no context from files)":
+            case "Ask":
                 llm_stream = self._chat_service.stream_chat(
                     messages=all_messages,
                     use_context=False,
@@ -185,7 +184,7 @@ class PrivateGptUi:
 
             case "Search Files":
                 response = self._chunks_service.retrieve_relevant(
-                    text=message, limit=10, prev_next_chunks=0
+                    text=message, limit=4, prev_next_chunks=0
                 )
 
                 sources = Source.curate_sources(response)
@@ -196,6 +195,13 @@ class PrivateGptUi:
                     f"{source.text}"
                     for index, source in enumerate(sources, start=1)
                 )
+
+            case "Improve":
+                llm_stream = self._chat_service.stream_chat(
+                    messages=all_messages,
+                    use_context=False,
+                )
+                yield from yield_deltas(llm_stream)
 
     # On initialization and on mode change, this function set the system prompt
     # to the default prompt based on the mode (and user settings).
@@ -209,8 +215,15 @@ class PrivateGptUi:
             case "Query Files":
                 p = settings().ui.default_query_system_prompt
             # For chat mode, obtain default system prompt from settings
-            case "LLM Chat (no context from files)":
+            case "Ask":
                 p = settings().ui.default_chat_system_prompt
+            case "Improve":
+                p = (
+                    "You are an English teacher.\n"
+                    "Improve any text you get:\n"
+                    "Rewrite it to be slightly formal while also removing spelling errors and grammatical mistakes\n"
+                    "Output the rewritten text only."
+                )
             # For any other mode, clear the system prompt
             case _:
                 p = ""

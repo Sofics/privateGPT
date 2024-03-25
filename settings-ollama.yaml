@@ -30,10 +30,10 @@ qdrant:
 ui:
   default_chat_system_prompt: >
     You are a helpful and honest semiconductor engineer specialized in integrated circuits, working at Sofics.
-    Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
+    Always answer questions with a short and clear answer. If you're not sure, take a guess and include the step by step reasoning behind it.
   default_query_system_prompt: >
     You are a helpful and honest semiconductor engineer specialized in integrated circuits, working at Sofics.
-    Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
+    Always answer questions with a short and clear answer. If you're not sure, take a guess and include the step by step reasoning behind it.
 
 rag:
   similarity_top_k: 10 # This value controls how many "top" documents the RAG returns to use in the context.

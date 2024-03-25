@@ -142,18 +142,10 @@ class SimpleIngestComponent(BaseIngestComponentWithIndex):
             for document in documents:
                 try:
                     self._index.insert(document, show_progress=True)
-                except ValueError:
-                    logger.warning("######### ingestion once, retrying... #########")
-                    # Try 2 more times for good measure :p
-                    try:
-                        self._index.insert(document, show_progress=True)
-                    except ValueError:
-                        try:
-                            self._index.insert(document, show_progress=True)
-                        except ValueError as e:
-                            logger.error("%s", str(e))
-                            logger.error("SKIPPED DOCUMENT:\n%s", document.__dict__)
-                            skipped_docs += 1
+                except ValueError as e:
+                    logger.error("%s", str(e))
+                    logger.error("########## SKIPPED DOCUMENT: ##########\n%s", document.__dict__)
+                    skipped_docs += 1
             logger.warning("########## SKIPPED %s DOCS !... ##########", skipped_docs)
             logger.debug("Persisting the index and nodes")
             # persist the index and nodes

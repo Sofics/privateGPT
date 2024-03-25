@@ -34,7 +34,7 @@ UI_TAB_TITLE = "ChipGPT"
 
 SOURCES_SEPARATOR = "\n\n Sources: \n"
 
-MODES = ["Query Files", "Search Files", "Ask", "Improve"]
+MODES = ["Query Files", "Search Files", "Ask", "Rewrite"]
 
 
 class Source(BaseModel):
@@ -196,7 +196,7 @@ class PrivateGptUi:
                     for index, source in enumerate(sources, start=1)
                 )
 
-            case "Improve":
+            case "Rewrite":
                 llm_stream = self._chat_service.stream_chat(
                     messages=all_messages,
                     use_context=False,
@@ -217,11 +217,11 @@ class PrivateGptUi:
             # For chat mode, obtain default system prompt from settings
             case "Ask":
                 p = settings().ui.default_chat_system_prompt
-            case "Improve":
+            case "Rewrite":
                 p = (
                     "You are an English teacher.\n"
                     "Improve any text you get:\n"
-                    "Rewrite it to be slightly formal while also removing spelling errors and grammatical mistakes\n"
+                    "Rewrite it to be slightly formal while also removing spelling errors and grammatical mistakes.\n"
                     "Output the rewritten text only."
                 )
             # For any other mode, clear the system prompt

@@ -11,7 +11,7 @@ embedding:
   mode: ollama
 
 ollama:
-  llm_model: nous-hermes2:10.7b-solar-q5_K_M
+  llm_model: mixtral:8x7b-instruct-v0.1-q3_K_M
   embedding_model: nomic-embed-text:latest
   api_base: http://ollama:11434
   tfs_z: 1.0              # Tail free sampling is used to reduce the impact of less probable tokens from the output. A higher value (e.g., 2.0) will reduce the impact more, while a value of 1.0 disables this setting.

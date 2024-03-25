@@ -143,6 +143,7 @@ class SimpleIngestComponent(BaseIngestComponentWithIndex):
                 try:
                     self._index.insert(document, show_progress=True)
                 except ValueError:
+                    logger.warning("######### ingestion once, retrying... #########")
                     # Try 2 more times for good measure :p
                     try:
                         self._index.insert(document, show_progress=True)

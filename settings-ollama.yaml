@@ -4,7 +4,7 @@ server:
 llm:
   mode: ollama
   max_new_tokens: 512
-  context_window: 3072
+  context_window: 4096
   temperature: 0.1     #The temperature of the model. Increasing the temperature will make the model answer more creatively. A value of 0.1 would be more factual. (Default: 0.1)
 
 embedding:
@@ -34,5 +34,10 @@ ui:
   default_query_system_prompt: >
     You are a helpful and honest semiconductor engineer specialized in integrated circuits, working at Sofics.
     Always give a concise answer. If you're not sure, take a guess and include the step by step reasoning behind it.
+
+rag:
+  similarity_top_k: 10 # This value controls how many "top" documents the RAG returns to use in the context.
+  similarity_value: 0.25 # This value is disabled by default.  If you enable this settings, the RAG will only use articles that meet a certain percentage score.
+
     
 

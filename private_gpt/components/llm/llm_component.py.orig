@@ -131,6 +131,9 @@ class LLMComponent:
                     temperature=settings.llm.temperature,
                     context_window=settings.llm.context_window,
                     additional_kwargs=settings_kwargs,
+<<<<<<< HEAD
+                    request_timeout=300,
+=======
                     request_timeout=ollama_settings.request_timeout,
                 )
             case "azopenai":
@@ -150,6 +153,7 @@ class LLMComponent:
                     api_key=azopenai_settings.api_key,
                     azure_endpoint=azopenai_settings.azure_endpoint,
                     api_version=azopenai_settings.api_version,
+>>>>>>> main
                 )
             case "mock":
                 self.llm = MockLLM()

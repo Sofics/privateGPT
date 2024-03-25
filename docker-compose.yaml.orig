@@ -11,7 +11,8 @@ services:
     environment:
       PORT: 8080
       PGPT_PROFILES: docker
-      PGPT_MODE: llamacpp
+<<<<<<< HEAD
+      PGPT_MODE: local
 #    deploy:
 #      resources:
 #        reservations:
@@ -19,3 +20,7 @@ services:
 #            - driver: nvidia
 #              count: 1
 #              capabilities: [ gpu ]
+
+=======
+      PGPT_MODE: llamacpp
+>>>>>>> main

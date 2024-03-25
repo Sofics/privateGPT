@@ -58,8 +58,12 @@ embeddings-azopenai = ["llama-index-embeddings-azure-openai"]
 vector-stores-qdrant = ["llama-index-vector-stores-qdrant"]
 vector-stores-chroma = ["llama-index-vector-stores-chroma"]
 vector-stores-postgres = ["llama-index-vector-stores-postgres"]
-storage-nodestore-postgres = ["llama-index-storage-docstore-postgres","llama-index-storage-index-store-postgres","psycopg2-binary","asyncpg"]
+<<<<<<< HEAD
 cryptography = ["cryptography"]
+
+=======
+storage-nodestore-postgres = ["llama-index-storage-docstore-postgres","llama-index-storage-index-store-postgres","psycopg2-binary","asyncpg"]
+>>>>>>> main
 
 [tool.poetry.group.dev.dependencies]
 black = "^22"

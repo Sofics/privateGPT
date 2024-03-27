@@ -34,7 +34,7 @@ UI_TAB_TITLE = "ChipGPT"
 
 SOURCES_SEPARATOR = "\n\n Sources: \n"
 
-MODES = ["Query Files", "Search Files", "Ask", "Rewrite"]
+MODES = ["Query Files", "Ask", "Ask engr.", "Rewrite", "Ask dev", "Search Files"]
 
 
 class Source(BaseModel):
@@ -145,16 +145,12 @@ class PrivateGptUi:
                 ),
             )
         match mode:
-            case "Sofics Query":
-                query_stream = self._chat_service.stream_chat(
-                    messages=[new_message],
-                    use_context=True,
-                    context_filter=get_sofics_context_filter(
-                        prompt=new_message.content,
-                        ingest_service=self._ingest_service
-                    ),
+            case "Ask" | "Ask engr." | "Rewrite" | "Ask dev":
+                llm_stream = self._chat_service.stream_chat(
+                    messages=all_messages,
+                    use_context=False,
                 )
-                yield from yield_deltas(query_stream)
+                yield from yield_deltas(llm_stream)
 
             case "Query Files":
                 # Use only the selected file for the query, if selected
@@ -175,12 +171,6 @@ class PrivateGptUi:
                     context_filter=context_filter,
                 )
                 yield from yield_deltas(query_stream)
-            case "Ask":
-                llm_stream = self._chat_service.stream_chat(
-                    messages=all_messages,
-                    use_context=False,
-                )
-                yield from yield_deltas(llm_stream)
 
             case "Search Files":
                 response = self._chunks_service.retrieve_relevant(
@@ -196,13 +186,6 @@ class PrivateGptUi:
                     for index, source in enumerate(sources, start=1)
                 )
 
-            case "Rewrite":
-                llm_stream = self._chat_service.stream_chat(
-                    messages=all_messages,
-                    use_context=False,
-                )
-                yield from yield_deltas(llm_stream)
-
     # On initialization and on mode change, this function set the system prompt
     # to the default prompt based on the mode (and user settings).
     @staticmethod
@@ -215,7 +198,7 @@ class PrivateGptUi:
             case "Query Files":
                 p = settings().ui.default_query_system_prompt
             # For chat mode, obtain default system prompt from settings
-            case "Ask":
+            case "Ask engr.":
                 p = settings().ui.default_chat_system_prompt
             case "Rewrite":
                 p = (
@@ -224,6 +207,8 @@ class PrivateGptUi:
                     "Rewrite it to be slightly formal while also removing spelling errors and grammatical mistakes.\n"
                     "Output the rewritten text only."
                 )
+            case "Ask dev":
+                p = "You are an efficient programmer that writes performant and readable code."
             # For any other mode, clear the system prompt
             case _:
                 p = ""

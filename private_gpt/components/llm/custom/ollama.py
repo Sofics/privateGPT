@@ -17,5 +17,9 @@ class CustomOllama(Ollama):
         super().__init__(*args, **kwargs)
         self.keep_alive = keep_alive
 
-    def stream_complete(self, prompt: str, **kwargs: Any):
-        return super().stream_complete(self, prompt, keep_alive=self.keep_alive, **kwargs)
+    def _get_all_kwargs(self, **kwargs: Any) -> dict:
+        return {
+            **self._model_kwargs,
+            **kwargs,
+            "keep_alive": self.keep_alive
+        }

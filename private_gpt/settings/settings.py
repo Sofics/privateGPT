@@ -221,6 +221,10 @@ class OllamaSettings(BaseModel):
         None,
         description="Model to use. Example: 'nomic-embed-text'.",
     )
+    keep_alive: str = Field(
+        "5m",
+        description="Time the model will stay loaded in memory after a request. examples: 5m, 5h, '-1' ",
+    )
     tfs_z: float = Field(
         1.0,
         description="Tail free sampling is used to reduce the impact of less probable tokens from the output. A higher value (e.g., 2.0) will reduce the impact more, while a value of 1.0 disables this setting.",
@@ -249,7 +253,6 @@ class OllamaSettings(BaseModel):
         120.0,
         description="Time elapsed until ollama times out the request. Default is 120s. Format is float. ",
     )
-
 
 class AzureOpenAISettings(BaseModel):
     api_key: str

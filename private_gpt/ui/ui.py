@@ -201,14 +201,9 @@ class PrivateGptUi:
             case "Ask engr.":
                 p = settings().ui.default_chat_system_prompt
             case "Rewrite":
-                p = (
-                    "You are an English teacher, working at Sofics.\n"
-                    "Improve any text you get:\n"
-                    "Rewrite it to be slightly formal while also removing spelling errors and grammatical mistakes.\n"
-                    "Output the rewritten text only."
-                )
+                p = settings().ui.default_rewrite_system_prompt
             case "Ask dev":
-                p = "You are an efficient programmer that writes performant and readable code."
+                p = settings().ui.default_ask_dev_system_prompt
             # For any other mode, clear the system prompt
             case _:
                 p = ""

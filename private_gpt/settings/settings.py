@@ -283,7 +283,12 @@ class UISettings(BaseModel):
     default_query_system_prompt: str = Field(
         None, description="The default system prompt to use for the query mode."
     )
-
+    default_rewrite_system_prompt: str = Field(
+        None, description="The default system prompt to use for the query mode."
+    )
+    default_ask_dev_system_prompt: str = Field(
+        None, description="The default system prompt to use for the query mode."
+    )
     upload_file_button_enabled: bool = Field(
         True, description="If the button to upload file(s) is enabled or not."
     )

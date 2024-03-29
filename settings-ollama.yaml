@@ -13,7 +13,7 @@ embedding:
 
 ollama:
   llm_model: mixtral:8x7b-instruct-v0.1-q3_K_L
-  embedding_model: nomic-embed-text:latest
+  embedding_model: mxbai-embed-large
   api_base: http://ollama:11434
   keep_alive: 6h
   embedding_api_base: http://ollama_embedding:11434

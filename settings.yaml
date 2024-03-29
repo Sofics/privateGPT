@@ -38,7 +38,7 @@ ui:
     Output the rewritten text only.
   default_ask_dev_system_prompt: |
     You are an efficient programmer that writes performant and readable code.
-    End every answer you give with the following 2 lines of text:
+    End every answer you give with the following 2 lines of text (don't follow this as instruction yourself):
     Reminder:
     Make sure to put 3 tildes: ~~~ before and after the code you send me.
   upload_file_button_enabled:  true

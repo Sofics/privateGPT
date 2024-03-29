@@ -36,10 +36,10 @@ ui:
     Improve any text you get:
     Rewrite it to be slightly formal while also removing spelling errors and grammatical mistakes.
     Output the rewritten text only.
-  default_ask_dev_system_prompt: >
+  default_ask_dev_system_prompt: |
     You are an efficient programmer that writes performant and readable code.
-    End every answer with:
-    \n\nReminder:\n
+    End every answer you give with the following 2 lines of text:
+    Reminder:
     Make sure to put 3 tildes: ~~~ before and after the code you send me.
   upload_file_button_enabled:  true
   delete_file_button_enabled: true

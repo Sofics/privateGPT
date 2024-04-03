@@ -1,18 +1,21 @@
 services:
   private-gpt:
     build:
+<<<<<<< HEAD
       dockerfile: Dockerfile.local
 #      dockerfile: Dockerfile.gpu
+=======
+      dockerfile: Dockerfile.external
+>>>>>>> privategpt/main
     volumes:
       - ./local_data/:/home/worker/app/local_data
-      - ./models/:/home/worker/app/models
     ports:
       - 8001:8080
     environment:
       PORT: 8080
       PGPT_PROFILES: docker
 <<<<<<< HEAD
-      PGPT_MODE: local
+      PGPT_MODE: llamacpp
 #    deploy:
 #      resources:
 #        reservations:
@@ -20,7 +23,10 @@ services:
 #            - driver: nvidia
 #              count: 1
 #              capabilities: [ gpu ]
-
 =======
-      PGPT_MODE: llamacpp
->>>>>>> main
+      PGPT_MODE: ollama
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ./models:/root/.ollama
+>>>>>>> privategpt/main

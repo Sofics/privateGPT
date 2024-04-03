@@ -136,7 +136,10 @@ class LLMComponent:
                     request_timeout=ollama_settings.request_timeout,
                 )
 
-                if ollama_settings.keep_alive != ollama_settings.model_fields["keep_alive"].default:
+                if (
+                    ollama_settings.keep_alive
+                    != ollama_settings.model_fields["keep_alive"].default
+                ):
                     # Modify Ollama methods to use the "keep_alive" field.
                     def add_keep_alive(func: Callable[..., Any]) -> Callable[..., Any]:
                         def wrapper(*args: Any, **kwargs: Any) -> Any:

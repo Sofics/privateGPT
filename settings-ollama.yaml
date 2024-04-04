@@ -28,7 +28,7 @@ vectorstore:
   database: qdrant
 
 qdrant:
-  path: local_data/private_gpt/qdrant
+  p ath: local_data/private_gpt/qdrant
 
 ui:
   default_chat_system_prompt: >
@@ -39,8 +39,8 @@ ui:
     Always answer questions with a short and clear answer. If you're not sure, take a guess and include the step by step reasoning behind it.
 
 rag:
-  similarity_top_k: 10 # This value controls how many "top" documents the RAG returns to use in the context.
-  similarity_value: 0.25 # This value is disabled by default.  If you enable this settings, the RAG will only use articles that meet a certain percentage score.
+  similarity_top_k: 6 # This value controls how many "top" documents the RAG returns to use in the context.
+  similarity_value: 0.33 # This value is disabled by default.  If you enable this settings, the RAG will only use articles that meet a certain percentage score.
 
     
 

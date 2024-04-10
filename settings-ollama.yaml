@@ -4,7 +4,7 @@ server:
 llm:
   mode: ollama
   max_new_tokens: 512
-  context_window: 4096
+  context_window: 2048
   temperature: 0.1     #The temperature of the model. Increasing the temperature will make the model answer more creatively. A value of 0.1 would be more factual. (Default: 0.1)
 
 embedding:
@@ -28,7 +28,7 @@ vectorstore:
   database: qdrant
 
 qdrant:
-  p ath: local_data/private_gpt/qdrant
+  path: local_data/private_gpt/qdrant
 
 ui:
   default_chat_system_prompt: >

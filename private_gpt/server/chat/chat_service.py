@@ -8,6 +8,7 @@ from llama_index.core.chat_engine.types import (
 from llama_index.core.indices import VectorStoreIndex
 from llama_index.core.indices.postprocessor import MetadataReplacementPostProcessor
 from llama_index.core.llms import ChatMessage, MessageRole
+from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.postprocessor import (
     SentenceTransformerRerank,
     SimilarityPostprocessor,
@@ -127,9 +128,11 @@ class ChatService:
                 )
                 node_postprocessors.append(rerank_postprocessor)
 
+            memory = ChatMemoryBuffer.from_defaults(token_limit=8192)  # CUSTOM CHANGE; bigger memory buffer
             return ContextChatEngine.from_defaults(
                 system_prompt=system_prompt,
                 retriever=vector_index_retriever,
+                memory=memory,
                 llm=self.llm_component.llm,  # Takes no effect at the moment
                 node_postprocessors=node_postprocessors,
             )

@@ -128,7 +128,7 @@ class ChatService:
                 )
                 node_postprocessors.append(rerank_postprocessor)
 
-            memory = ChatMemoryBuffer.from_defaults(token_limit=8192)  # CUSTOM CHANGE; bigger memory buffer
+            memory = ChatMemoryBuffer.from_defaults(token_limit=20_000)  # CUSTOM CHANGE; bigger memory buffer
             return ContextChatEngine.from_defaults(
                 system_prompt=system_prompt,
                 retriever=vector_index_retriever,
